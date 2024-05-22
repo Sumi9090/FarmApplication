@@ -1,0 +1,63 @@
+package com.farm.controller;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.sl4j.Logger;
+import org.sl4j.LoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
+import com.farm.dto.FarmData;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
+public class FarmControllerTest<MockMvc> {
+
+	private static final Logger log = LoggerFactory.getLogger(FarmController.class);
+
+	private static final String END_POINT_PATH_1 = "/planted";
+
+	private static final String END_POINT_PATH_2 = "/harvested";
+
+	@Autowired
+	private MockMvc mockMvc;
+
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	
+	@Test
+	public void testPlantedShouldReturn400BadRequest() throws Exception{
+		
+		FarmData farmData = new FarmData();
+		farmData.setPlantingArea(null);
+		
+		String requestBody = objectMapper.writeValueAsString(farmData);
+		
+		mockMvc.perform(post(END_POINT_PATH_1).contentType("application/json")
+			.content(requestBody)
+			.andExpect(status().isBadRequest())
+			.andDo(print())
+
+		;
+		
+	}
+
+	@Test
+	public void testHarvestedShouldReturn400BadRequest() throws Exception{
+		
+		FarmData farmData = new FarmData();
+		farmData.setCropTypes(null);
+		
+		String requestBody = objectMapper.writeValueAsString(farmData);
+		
+		mockMvc.perform(post(END_POINT_PATH_2).contentType("application/json")
+			.content(requestBody)
+			.andExpect(status().isBadRequest())
+			.andDo(print())
+
+		;
+		
+	}
+}
+
+	
